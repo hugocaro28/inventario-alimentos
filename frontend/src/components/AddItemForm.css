@@ -1,0 +1,39 @@
+/* src/components/AddItemForm.css */
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+form div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+form label {
+  flex: 1;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="date"],
+form button {
+  flex: 2;
+}
+
+button {
+  align-self: center;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
