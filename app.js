@@ -6,13 +6,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Configuração do banco de dados com variáveis de ambiente para facilitar o deploy
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '', // Sua senha do MariaDB
-  database: 'InventarioAlimentos'
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '', // Usar a senha do MariaDB definida nas variáveis de ambiente
+  database: process.env.DB_NAME || 'InventarioAlimentos',
+  port: process.env.DB_PORT || 3306,
 });
 
+// Conexão com o banco de dados
 db.connect((err) => {
   if (err) {
     console.error('Erro ao conectar ao MariaDB:', err);
@@ -44,9 +47,7 @@ app.get('/items', (req, res) => {
 app.post('/items', (req, res) => {
   const { nome, categoria, quantidade, unidade, preco_compra, data_validade } = req.body;
 
-  // Aqui, 'preco_compra' é salvo exatamente como foi inserido no frontend, sem multiplicação
   const query = 'INSERT INTO Items (nome, categoria, quantidade, unidade, preco_compra, data_validade) VALUES (?, ?, ?, ?, ?, ?)';
-  
   db.query(query, [nome, categoria, quantidade, unidade, preco_compra || null, data_validade || null], (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -70,8 +71,8 @@ app.delete('/items/:id', (req, res) => {
   });
 });
 
-// Alterar o servidor para escutar em '0.0.0.0' para acesso na rede
-const PORT = 5001;
+// Definir para escutar em '0.0.0.0' para acesso na rede
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor rodando em http://0.0.0.0:${PORT}`);
 });
